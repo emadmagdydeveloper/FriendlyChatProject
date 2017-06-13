@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        >
+        <TextView
+
+            android:id="@+id/text_Counter"
+            android:layout_marginLeft="17dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/notification_bg_txt"
+            android:text="1"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="8sp"
+            android:visibility="gone"
+            />
+        <ImageView
+            android:id="@+id/notification_img"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/notification_blue"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="3"
+    android:padding="5dp"
+    >
+
+  <ImageView
+      android:layout_width="0dp"
+      android:layout_weight=".8"
+      android:layout_height="88dp"
+      android:id="@+id/notification_userIcon"
+      android:scaleType="centerCrop"
+      android:layout_gravity="top"
+
+       />
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_weight="2.2"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_gravity="center"
+      android:paddingRight="2dp"
+      android:paddingLeft="2dp"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:textDirection="ltr"
+        >
+     <!-- <TextView
+          android:id="@+id/notification_user_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left"
+          android:maxLines="1"
+          android:inputType="textPersonName"
+          android:scrollHorizontally="true"
+          android:ellipsize="end"
+
+
+          />-->
+      <TextView
+          android:id="@+id/notification_txt"
+          android:inputType="textMultiLine"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+
+          android:gravity="left"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="left"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="5dp"
+        >
+      <Button
+
+          android:id="@+id/notification_addBtn"
+          android:layout_width="105dp"
+          android:layout_height="30dp"
+          android:background="@drawable/buttonshape"
+          android:text="Add"
+          android:textColor="@android:color/white"
+          android:textAllCaps="false"
+          android:paddingRight="5dp"
+          android:layout_gravity="center"
+          android:layout_marginRight="5dp"
+          android:textSize="12sp"
+          android:paddingLeft="5dp"
+
+
+          />
+      <Button
+          android:id="@+id/notification_rejectBtn"
+          android:layout_width="105dp"
+          android:layout_height="30dp"
+          android:background="@drawable/buttonshape2"
+          android:text="Reject"
+          android:textColor="@color/gray2"
+          android:textAllCaps="false"
+          android:paddingRight="5dp"
+          android:layout_gravity="center|right"
+          android:layout_marginRight="5dp"
+          android:textSize="12sp"
+          android:paddingLeft="5dp"
+
+
+
+          />
+    </LinearLayout>
+
+  </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+
+    >
+<TextView
+    android:id="@+id/d_title"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:textAppearance="@android:style/TextAppearance.Medium"
+    android:textStyle="bold"
+
+    />
+ <TextView
+     android:id="@+id/d_content"
+     android:layout_width="250dp"
+     android:layout_height="wrap_content"
+     android:padding="5dp"
+     android:layout_marginTop="20dp"
+     android:textSize="18sp"
+
+     />
+    <Button
+        android:id="@+id/d_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="cancel"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="right"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+        android:gravity="right|center"
+        />
+    <Button
+        android:id="@+id/d_deleteConversation"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="delete conversation"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="right"
+        android:gravity="center|right"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+
+        />
+
+</LinearLayout>

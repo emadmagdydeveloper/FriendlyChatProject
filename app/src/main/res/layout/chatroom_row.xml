@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="3dp"
+    android:descendantFocusability="blocksDescendants"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="3"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
+    android:longClickable="false"
+    >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chatroom_row_imgFriend"
+        android:layout_width="0dp"
+        android:layout_weight=".45"
+        android:layout_height="55dp"
+        android:clickable="false"
+        android:longClickable="false"
+        android:layout_gravity="center"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="2.5"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clickable="false"
+        android:descendantFocusability="blocksDescendants"
+        android:longClickable="false"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:descendantFocusability="blocksDescendants"
+            android:longClickable="false"
+            android:clickable="false"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1.35"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:descendantFocusability="blocksDescendants"
+                android:longClickable="false"
+                android:clickable="false"
+
+                >
+
+                <TextView
+                    android:id="@+id/chatroom_row_friendName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:paddingLeft="5dp"
+                    android:paddingBottom="5dp"
+                    android:textStyle="normal"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:scrollHorizontally="true"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    android:textColor="@android:color/black"
+
+                    />
+            </LinearLayout>
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight=".68"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:paddingRight="10dp"
+               android:descendantFocusability="blocksDescendants"
+               android:longClickable="false"
+               android:clickable="false"
+
+               >
+               <TextView
+                   android:id="@+id/chatroom_row_msgDate"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textSize="12sp"
+                   android:inputType="date"
+                   android:textStyle="normal"
+                   android:paddingTop="5dp"
+                   android:paddingBottom="5dp"
+                   android:clickable="false"
+                   android:longClickable="false"
+                   android:textColor="@android:color/black"
+                   android:gravity="right"
+
+                   />
+
+           </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:descendantFocusability="blocksDescendants"
+            android:longClickable="false"
+            android:clickable="false"
+
+            >
+            <TextView
+                android:id="@+id/identifier_txt"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:text="You:"
+                android:textSize="12sp"
+                android:paddingLeft="5dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:clickable="false"
+                android:longClickable="false"
+
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".75"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:longClickable="false"
+                android:clickable="false"
+
+                >
+                <TextView
+                    android:id="@+id/chatroom_row_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:textStyle="normal"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    android:layout_gravity="left"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawerLayout"
+
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:context="com.example.omd.friendlychat.Activities.MainActivity"
+        >
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            tools:context="com.example.omd.friendlychat.Activities.MainActivity"
+            >
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.omd.friendlychat.Activities.MainActivity">
+
+
+        <FrameLayout
+
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll"
+            >
+
+        </FrameLayout>
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            >
+            <android.support.design.widget.TabLayout
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabLayout"
+                android:background="@color/colorPrimary"
+                android:layout_alignParentBottom="true"
+                app:tabTextColor="@android:color/white"
+                app:tabIndicatorColor="@null"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+
+                >
+
+            </android.support.design.widget.TabLayout>
+
+            <TextView
+                android:id="@+id/myFriendsmenu"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:drawableRight="@drawable/myfriendsmenu"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+
+ <android.support.design.widget.NavigationView
+
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_gravity="right"
+     android:id="@+id/navView"
+     >
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/main_myFriend_Container"
+         android:visibility="gone"
+         >
+         <ProgressBar
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             />
+     </RelativeLayout>
+     <LinearLayout
+         android:id="@+id/myFriend_Container"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical"
+         android:visibility="visible"
+         >
+
+
+                 <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="140dp"
+                     android:background="@color/colorPrimary"
+                     android:paddingLeft="16dp"
+                     android:paddingRight="16dp"
+
+                     >
+                     <ImageView
+                         android:layout_marginTop="20dp"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentRight="true"
+                         android:src="@drawable/back_icon"
+                         android:id="@+id/backBtn"
+                         />
+                     <LinearLayout
+                         android:id="@+id/myData_section"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="horizontal"
+                         android:layout_alignParentLeft="true"
+                         android:layout_below="@+id/backBtn"
+                         android:layout_marginTop="5dp"
+                         android:descendantFocusability="blocksDescendants"
+                         >
+                         <de.hdodenhof.circleimageview.CircleImageView
+                             android:layout_width="65dp"
+                             android:layout_height="65dp"
+                             app:civ_border_width="1dp"
+                             app:civ_border_color="@color/gray"
+                             android:id="@+id/myfriendfragment_userIcon"
+                             android:layout_gravity="center"
+                             android:clickable="false"
+                             android:longClickable="false"
+
+                             />
+                         <LinearLayout
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:orientation="vertical"
+                             android:layout_gravity="center"
+                             android:paddingLeft="5dp"
+                             android:paddingRight="5dp"
+                             android:clickable="false"
+                             android:longClickable="false"
+
+                             >
+                             <TextView
+                                 android:id="@+id/myfriendfragment_userName"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:lines="1"
+                                 android:maxLength="15"
+                                 android:scrollHorizontally="true"
+                                 android:ellipsize="end"
+                                 android:inputType="textPersonName"
+                                 android:textColor="@android:color/white"
+                                 android:textStyle="normal"
+                                 android:textSize="16sp"
+                                 android:clickable="false"
+                                 android:longClickable="false"
+
+
+                                 />
+                             <LinearLayout
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:orientation="horizontal"
+                                 android:weightSum="3"
+                                 android:clickable="false"
+                                 android:longClickable="false"
+
+                                 >
+                                 <TextView
+                                     android:id="@+id/myfriendfragment_userProfile"
+                                     android:layout_width="0dp"
+                                     android:layout_weight="2.6"
+                                     android:layout_height="wrap_content"
+                                     android:lines="1"
+                                     android:inputType="text"
+                                     android:text="View Profile"
+                                     android:textColor="@color/viewprofile"
+                                     android:textSize="12sp"
+                                     android:layout_gravity="center"
+                                     android:clickable="false"
+                                     android:longClickable="false"
+
+
+                                     />
+                                 <ImageView
+                                     android:layout_width="0dp"
+                                     android:layout_weight=".4"
+                                     android:layout_height="wrap_content"
+                                     android:src="@drawable/nav"
+                                     android:scaleType="centerInside"
+                                     android:layout_gravity="center"
+                                     android:clickable="false"
+                                     android:longClickable="false"
+
+                                     />
+                             </LinearLayout>
+                         </LinearLayout>
+                     </LinearLayout>
+
+
+
+
+
+
+                 </RelativeLayout>
+         <ScrollView
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:fillViewport="true"
+             android:isScrollContainer="true"
+             android:scrollbars="none"
+             >
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:id="@+id/myfriendfragmentcontainer"
+
+                 >
+
+             </FrameLayout>
+         </ScrollView>
+         </LinearLayout>
+
+ </android.support.design.widget.NavigationView>
+
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context ="com.example.omd.friendlychat.Activities.MainActivity"
+    >
+    <item android:id="@+id/viewProfile"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="View Profile"
+        />
+
+    <item android:id="@+id/block"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="Block"
+        />
+
+    <item android:id="@+id/signout"
+      android:orderInCategory="300"
+      app:showAsAction="never"
+      android:title="SignOut"
+    />
+
+    <item android:id="@+id/deleteaccount"
+    android:orderInCategory="400"
+    app:showAsAction="never"
+    android:title="Delete my account"
+    />
+
+</menu>

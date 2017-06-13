@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+
+    >
+
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       >
+      <ImageView
+          android:layout_gravity="center"
+          android:layout_width="0dp"
+          android:layout_weight=".4"
+          android:layout_height="20dp"
+          android:src="@mipmap/activenoew"
+          />
+       <TextView
+           android:layout_width="0dp"
+           android:layout_weight=".9"
+           android:layout_height="wrap_content"
+           android:text="Active Now"
+           android:textStyle="normal"
+           android:textSize="16sp"
+           android:layout_gravity="center"
+           />
+   </LinearLayout>
+    <ListView
+        android:id="@+id/myFriendsList_online"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="false"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        tools:listitem="@layout/myfriendlist_row_online"
+        android:scrollbars="none"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+
+        >
+
+
+    </ListView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:text="Contacts"
+            android:textStyle="normal"
+            android:textSize="16sp"
+
+            />
+
+        <ListView
+            android:id="@+id/myFriendsList_offline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:scrollbars="none"
+            android:isScrollContainer="false"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            tools:listitem="@layout/myfriendlist_row_offline"
+            android:listSelector="@android:color/transparent"
+
+
+            >
+
+        </ListView>
+
+
+    </LinearLayout>
+
+
+
+<!--
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ListView
+        android:id="@+id/myfriendlistview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/myfriendlist_row_online"
+        android:dividerHeight="0dp"
+        ></ListView>
+</FrameLayout>-->
