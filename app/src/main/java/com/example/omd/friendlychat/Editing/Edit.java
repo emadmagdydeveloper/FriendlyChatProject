@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,6 +28,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Delta on 19/05/2017.
  */
@@ -35,6 +40,7 @@ public class Edit {
     FirebaseAuth mAuth ;
     Context mContext;
     ProgressDialog mDialog;
+    public static boolean flag;
 
     private AlertDialog.Builder mBuilder;
 
@@ -116,7 +122,7 @@ public class Edit {
     }
     public void Edit_status(final String myId, TextView myStatus)
     {
-        String statusTxt = myStatus.getText().toString();
+        final String statusTxt = myStatus.getText().toString();
         final EditText editText = new EditText(mContext);
         editText.setText(statusTxt);
         mBuilder.setView(editText);
@@ -124,9 +130,10 @@ public class Edit {
         mBuilder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!editText.getText().toString().isEmpty()){
+                if (!editText.getText().toString().isEmpty()&&!editText.getText().toString().equals(statusTxt)){
                     DatabaseReference statusRef = dRef.child("Status").child(myId);
                     statusRef.setValue(new StatusModel(editText.getText().toString()));
+                    setMyStatus_toall_friends(editText.getText().toString());
                 }
 
             }
@@ -141,6 +148,46 @@ public class Edit {
         mBuilder.show();
         mBuilder.create();
     }
+
+    private void setMyStatus_toall_friends(final String myStatus) {
+        DatabaseReference myFriendRef = dRef.child("Friends").child(mAuth.getCurrentUser().getUid().toString());
+        myFriendRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue()!=null) {
+
+                    if (flag == true) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+                            Toast.makeText(mContext, flag + "", Toast.LENGTH_SHORT).show();
+                            add_notifications(ds.getKey().toString(), myStatus);
+
+
+                        }
+
+
+                    }
+                    else
+                        {
+                         flag=false;
+                        }
+                }
+                else
+                    {
+
+                        flag=false;
+                    }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void Remove_Friend(final String myId, final String friend_id)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -158,13 +205,15 @@ public class Edit {
 
                             DatabaseReference FriendsRef = dRef.child("Friends").child(friend_id).child(myId);
                             FriendsRef.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful())
 
                                     {
+                                        String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
                                         DatabaseReference NotfRef = dRef.child("Notifications").child(friend_id).push();
-                                        Notifications_Model n_Model = new Notifications_Model(myId,MyData.getMyName().toString() + " delete friendship");
+                                        Notifications_Model n_Model = new Notifications_Model(myId,MyData.getMyName().toString() + " delete friendship at "+dateFormat);
                                         NotfRef.setValue(n_Model);
                                         DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(friend_id).push();
                                         Notifications_Read_Model readnotf = new Notifications_Read_Model(myId,false);
@@ -211,12 +260,14 @@ public class Edit {
                blockRef.setValue(true);
                DatabaseReference friendsRef = dRef.child("Friends").child(myId).child(user_id);
                friendsRef.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                   @RequiresApi(api = Build.VERSION_CODES.N)
                    @Override
                    public void onComplete(@NonNull Task<Void> task) {
                        if (task.isSuccessful())
                        {
+                           String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
                            DatabaseReference NotfRef = dRef.child("Notifications").child(user_id).push();
-                           Notifications_Model n_Model = new Notifications_Model(myId, MyData.getMyName() + " block you");
+                           Notifications_Model n_Model = new Notifications_Model(myId, MyData.getMyName() + " block you at "+dateFormat);
                            NotfRef.setValue(n_Model);
                            DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(user_id).push();
                            Notifications_Read_Model readnotf = new Notifications_Read_Model(myId,false);
@@ -258,12 +309,15 @@ public class Edit {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful())
                     {
+                        String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
                         DatabaseReference NotfRef = dRef.child("Notifications").child(userId).push();
-                        Notifications_Model n_Model = new Notifications_Model(myId, MyData.getMyName().toString() + " delete block");
+                        Notifications_Model n_Model = new Notifications_Model(myId, MyData.getMyName().toString() + " delete block at "+dateFormat);
                         NotfRef.setValue(n_Model);
                         DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(userId).push();
                         Notifications_Read_Model readnotf = new Notifications_Read_Model(myId,false);
                         NotfReadRef.setValue(readnotf);
+
+                        AddFriend(myId,userId);
 
                     }
                 }
@@ -566,6 +620,32 @@ public class Edit {
 
             }
         });
+
+    }
+
+
+    private void add_notifications(String userId, String myStatus)
+    {
+        String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
+        DatabaseReference notfRef = dRef.child("Notifications").child(userId.toString()).push();
+        DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(userId).push();
+        Notifications_Read_Model read = new Notifications_Read_Model(mAuth.getCurrentUser().getUid().toString(),false);
+        NotfReadRef.setValue(read);
+        Notifications_Model notifications_model = new Notifications_Model(mAuth.getCurrentUser().getUid().toString(), MyData.getMyName() + " Change status to "+myStatus+" at "+dateFormat);
+        notfRef.setValue(notifications_model);
+
+
+    }
+
+    public void add_Notifications(String myId,String userId,String msg)
+    {
+        String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
+        DatabaseReference NotfRef = dRef.child("Notifications").child(userId).push();
+        DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(userId).push();
+        Notifications_Read_Model read = new Notifications_Read_Model(myId,false);
+        NotfReadRef.setValue(read);
+        Notifications_Model m_Model = new Notifications_Model(myId,MyData.getMyName().toString()+" "+msg+" "+dateFormat);
+        NotfRef.setValue(m_Model);
 
     }
 }

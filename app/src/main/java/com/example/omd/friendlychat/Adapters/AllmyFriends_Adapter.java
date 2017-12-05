@@ -82,6 +82,7 @@ public class AllmyFriends_Adapter extends BaseAdapter{
                }
                if (flag == 1)
                {
+                   Check_iam_notin_userBlock(mAuth.getCurrentUser().getUid().toString(),information.getUserId().toString(),popMenu);
                    popMenu.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View view) {
@@ -178,6 +179,37 @@ public class AllmyFriends_Adapter extends BaseAdapter{
                     if (dataSnapshot.hasChild(userId)){
                         imageView.setVisibility(View.INVISIBLE);
                     }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void Check_iam_notin_userBlock(final String myId, final String userId, final ImageView popmenu)
+    {
+        DatabaseReference blockRef = dRef.child("Blocks").child(userId);
+        blockRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() !=null)
+                {
+                    if (dataSnapshot.hasChild(myId))
+                    {
+
+                        popmenu.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        popmenu.setVisibility(View.VISIBLE);
+                    }
+                }
+                else
+                {
+                    popmenu.setVisibility(View.VISIBLE);
+
                 }
             }
 

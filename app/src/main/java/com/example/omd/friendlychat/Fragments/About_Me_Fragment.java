@@ -101,6 +101,7 @@ public class About_Me_Fragment extends Fragment {
             public void onClick(View view) {
                 Edit edit = new Edit(mContext);
                 edit.Edit_status(myId,myStatus);
+                edit.flag=true;
             }
 
         });

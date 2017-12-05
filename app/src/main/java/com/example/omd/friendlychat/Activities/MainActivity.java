@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
@@ -15,14 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.omd.friendlychat.Editing.Edit;
 import com.example.omd.friendlychat.Editing.MyData;
 import com.example.omd.friendlychat.Fragments.AddFriendsFragment;
 import com.example.omd.friendlychat.Fragments.CallFragment;
 import com.example.omd.friendlychat.Fragments.ChatFragment;
-import com.example.omd.friendlychat.Fragments.FriendRequestFragment;
+import com.example.omd.friendlychat.Fragments.FriendRequest_notifications_Fragment;
 import com.example.omd.friendlychat.Fragments.MyFriendFragment;
 import com.example.omd.friendlychat.R;
 import com.example.omd.friendlychat.models.Notifications_Read_Model;
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView notf_counter;
     private ImageView notf_img;
     Toolbar toolbar;
+    AppBarLayout mAppBarLayout;
 
     ImageView backBtn;
     DatabaseReference mdref;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         /////////////////////////////////////////
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.main_AppBar);
 
         /////////////////////////////////////////
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     tab.setIcon(R.drawable.s_call);
                     notf_img.setImageResource(R.drawable.notification_blue);
                     getSupportActionBar().setTitle("Call");
+                    mAppBarLayout.setVisibility(View.VISIBLE);
 
 
 
@@ -124,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     tab.setIcon(R.drawable.s_home);
                     notf_img.setImageResource(R.drawable.notification_blue);
                     getSupportActionBar().setTitle("FriendlyChat");
+                    mAppBarLayout.setVisibility(View.VISIBLE);
+
 
 
 
@@ -132,14 +137,18 @@ public class MainActivity extends AppCompatActivity {
                     tab.setIcon(R.drawable.s_addfriends);
                     notf_img.setImageResource(R.drawable.notification_blue);
                     getSupportActionBar().setTitle("Add Friend");
+                    mAppBarLayout.setVisibility(View.VISIBLE);
+
                 }
                 else if (tab.getTag().equals("notification"))
                 {
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FriendRequestFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FriendRequest_notifications_Fragment()).commit();
                     notf_img.setImageResource(R.drawable.notification_white);
                     getSupportActionBar().setTitle("Notifications");
+                    mAppBarLayout.setVisibility(View.VISIBLE);
                     Read_ALL_Notifications();
+
 
 
                 }
@@ -324,7 +333,6 @@ public class MainActivity extends AppCompatActivity {
                             if (mRead_model.isRead() == false) {
                                 notf_numbers++;
                             }
-                            Toast.makeText(MainActivity.this, notf_numbers + "", Toast.LENGTH_SHORT).show();
                             DatabaseReference NotfCountRef = FirebaseDatabase.getInstance().getReference().child("Notifications_count");
                             NotfCountRef.child(MyData.getMyId().toString()).child("Count").setValue(notf_numbers);
                         }
@@ -335,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                     {
                          DatabaseReference NotfCountRef = FirebaseDatabase.getInstance().getReference().child("Notifications_count");
-                        NotfCountRef.child(mAuth.getCurrentUser().getUid().toString()).child("Count").setValue(0);
+                        NotfCountRef.child(MyData.getMyId()).child("Count").setValue(0);
                     }
             }
 

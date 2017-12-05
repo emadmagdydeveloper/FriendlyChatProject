@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +39,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +52,6 @@ public class AddFriendsFragment extends Fragment {
 
     private RelativeLayout pb_container;
     private LinearLayout addFriend_Container;
-    private ProgressBar mBar;
     private ListView adduser_listView;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef_Users;
@@ -155,6 +155,7 @@ public class AddFriendsFragment extends Fragment {
     }
 
 
+
     class Adapter extends BaseAdapter {
 
         List<Object> list_users;
@@ -192,7 +193,8 @@ public class AddFriendsFragment extends Fragment {
         }
 
         @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup)
+        {
             inflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.userlist_row, viewGroup, false);
             information = (UserInformation) list_users.get(i);
@@ -210,71 +212,39 @@ public class AddFriendsFragment extends Fragment {
             final Button addFrind_reject_Btn = (Button) view.findViewById(R.id.addfriend_rejectBtn);
             final TextView friend_txt = (TextView) view.findViewById(R.id.addfriend_textBtn);
 
-            check_user_notin_FriendRequest_Ref(mAuth.getCurrentUser().getUid().toString(), information.getUserId().toString(), addFriend_addfriendBtn, addFriend_cancelRequestBtn, addFriend_acceptBtn, addFrind_reject_Btn, friend_txt);
-
-
-
-            addFriend_acceptBtn.setOnClickListener(new View.OnClickListener() {
+            popmenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
-                    final UserInformation user_Data1 = (UserInformation) list_users.get(i);
-
-                    DatabaseReference FriendrequstRef = dRef.child("FriendRequest").child(mAuth.getCurrentUser().getUid()).child(user_Data1.getUserId());
-                    FriendrequstRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    PopupMenu popupMenu = new PopupMenu(mContext, view);
+                    popupMenu.getMenuInflater().inflate(R.menu.popmenu, popupMenu.getMenu());
+                    popupMenu.show();
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.popmenu_viewprofile) {
+                                UserInformation information = (UserInformation) list_users.get(i);
+                                Intent intent = new Intent(mContext, profile.class);
+                                intent.putExtra("friendData", information);
+                                mContext.startActivity(intent);
 
-                            if (task.isSuccessful())
-                            {
-                                DatabaseReference friendsRef1 = dRef.child("Friends");
-                                friendsRef1.child(mAuth.getCurrentUser().getUid().toString()).child(user_Data1.getUserId().toString()).setValue(true);
-                                DatabaseReference friendsRef2 = dRef.child("Friends");
-
-                                friendsRef2.child(user_Data1.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                             add_to_Notifications(mAuth.getCurrentUser().getUid().toString(),user_Data1.getUserId().toString());
-
-                                        }
-
-                                    }
-                                });
-                            }
-                        }
-                    });
-
-
-                }
-
-            });
-            addFrind_reject_Btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    final UserInformation m_info = (UserInformation) list_users.get(i);
-                    DatabaseReference notfRef = dRef.child("Notifications").child(m_info.getUserId().toString()).push();
-                    // DatabaseReference notfRef = dRef.child("Notifications").child(m_info.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString());
-                    DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(m_info.getUserId()).push();
-                    Notifications_Read_Model read = new Notifications_Read_Model(mAuth.getCurrentUser().getUid().toString(),false);
-                    NotfReadRef.setValue(read);
-                    Notifications_Model n_Model = new Notifications_Model(mAuth.getCurrentUser().getUid().toString(), MyData.getMyName() + " reject a friend request");
-                    notfRef.setValue(n_Model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful())
-                            {
-                                UserInformation userDataFrom_List = (UserInformation) list_users.get(i);
-                                DatabaseReference m_notfRef = dRef.child("FriendRequest").child(mAuth.getCurrentUser().getUid().toString());
-                                m_notfRef.child(userDataFrom_List.getUserId().toString()).getRef().removeValue();
+                            } else if (item.getItemId() == R.id.popmenu_sendmessage) {
+                                UserInformation information = (UserInformation) list_users.get(i);
+                                Intent intent = new Intent(mContext, ChatRoom.class);
+                                intent.putExtra("friend_data", information);
+                                mContext.startActivity(intent);
 
                             }
+                            return true;
                         }
                     });
                 }
             });
+            Check_iam_notin_userBlock(mAuth.getCurrentUser().getUid().toString(), information.getUserId().toString(), addFriend_addfriendBtn, addFriend_cancelRequestBtn, addFriend_acceptBtn, addFrind_reject_Btn, friend_txt,popmenu);
+            //check_user_notin_FriendRequest_Ref(mAuth.getCurrentUser().getUid().toString(), information.getUserId().toString(), addFriend_addfriendBtn, addFriend_cancelRequestBtn, addFriend_acceptBtn, addFrind_reject_Btn, friend_txt);
+
+
+
+
 
             addFriend_addfriendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,14 +254,16 @@ public class AddFriendsFragment extends Fragment {
                     final UserInformation information2 = (UserInformation) list_users.get(i);
                     DatabaseReference FriendRequest_Ref = dRef.child("FriendRequest");
                     FriendRequest_Ref.child(information2.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString()).setValue(true);
+                    Edit edit = new Edit(mContext);
+                    edit.add_Notifications(mAuth.getCurrentUser().getUid().toString(),information2.getUserId().toString(),"sent a friend request at");
 
-                    addNotifications(information2);
 
                 }
             });
             addFriend_cancelRequestBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     final UserInformation information3 = (UserInformation) list_users.get(i);
                     final DatabaseReference notfRef = dRef.child("FriendRequest").child(information3.getUserId().toString());
                     notfRef.child(mAuth.getCurrentUser().getUid().toString()).getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -305,6 +277,8 @@ public class AddFriendsFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            Edit edit = new Edit(mContext);
+                                            edit.add_Notifications(mAuth.getCurrentUser().getUid().toString(),information3.getUserId().toString(),"canceled a friend request at");
                                             Toast.makeText(mContext, "Request is canceled", Toast.LENGTH_SHORT).show();
 
                                         }
@@ -348,29 +322,66 @@ public class AddFriendsFragment extends Fragment {
                 }
             });
 
-            popmenu.setOnClickListener(new View.OnClickListener() {
+            addFriend_acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PopupMenu popupMenu = new PopupMenu(mContext, view);
-                    popupMenu.getMenuInflater().inflate(R.menu.popmenu, popupMenu.getMenu());
-                    popupMenu.show();
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            if (item.getItemId() == R.id.popmenu_viewprofile) {
-                                UserInformation information = (UserInformation) list_users.get(i);
-                                Intent intent = new Intent(mContext, profile.class);
-                                intent.putExtra("friendData", information);
-                                mContext.startActivity(intent);
 
-                            } else if (item.getItemId() == R.id.popmenu_sendmessage) {
-                                UserInformation information = (UserInformation) list_users.get(i);
-                                Intent intent = new Intent(mContext, ChatRoom.class);
-                                intent.putExtra("friend_data", information);
-                                mContext.startActivity(intent);
+
+                    final UserInformation user_Data1 = (UserInformation) list_users.get(i);
+
+                    DatabaseReference FriendrequstRef = dRef.child("FriendRequest").child(mAuth.getCurrentUser().getUid()).child(user_Data1.getUserId());
+                    FriendrequstRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if (task.isSuccessful())
+                            {
+                                DatabaseReference friendsRef1 = dRef.child("Friends");
+                                friendsRef1.child(mAuth.getCurrentUser().getUid().toString()).child(user_Data1.getUserId().toString()).setValue(true);
+                                DatabaseReference friendsRef2 = dRef.child("Friends");
+
+                                friendsRef2.child(user_Data1.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+
+                                            Edit edit = new Edit(mContext);
+                                            edit.add_Notifications(mAuth.getCurrentUser().getUid().toString(),user_Data1.getUserId().toString(),"accept a friend request at");
+
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+
+                }
+
+            });
+            addFrind_reject_Btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm aa").format(new Date());
+                    final UserInformation m_info = (UserInformation) list_users.get(i);
+                    DatabaseReference notfRef = dRef.child("Notifications").child(m_info.getUserId().toString()).push();
+                    // DatabaseReference notfRef = dRef.child("Notifications").child(m_info.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString());
+                    DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(m_info.getUserId()).push();
+                    Notifications_Read_Model read = new Notifications_Read_Model(mAuth.getCurrentUser().getUid().toString(),false);
+                    NotfReadRef.setValue(read);
+                    Notifications_Model n_Model = new Notifications_Model(mAuth.getCurrentUser().getUid().toString(), MyData.getMyName() + " reject a friend request at "+dateFormat);
+                    notfRef.setValue(n_Model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                UserInformation userDataFrom_List = (UserInformation) list_users.get(i);
+                                DatabaseReference m_notfRef = dRef.child("FriendRequest").child(mAuth.getCurrentUser().getUid().toString());
+                                m_notfRef.child(userDataFrom_List.getUserId().toString()).getRef().removeValue();
 
                             }
-                            return true;
                         }
                     });
                 }
@@ -380,8 +391,9 @@ public class AddFriendsFragment extends Fragment {
         }
 
 
-
         private void check_user_notin_FriendRequest_Ref(final String myId, final String userId, final Button btnadd, final Button btncancel, final Button btnaddfriend, final Button btnreject, final TextView friend_txtBtn) {
+
+
             DatabaseReference FriendRequest_Ref = dRef.child("FriendRequest").child(myId);
             FriendRequest_Ref.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -412,45 +424,6 @@ public class AddFriendsFragment extends Fragment {
                 }
             });
 
-
-        }
-
-
-        private void Check_Is_friend(final String myId, final String userId, final Button addBtn, final Button cancel_Btn, final Button btnaddfriend, final Button btnreject, final TextView friendtext_Btn) {
-            DatabaseReference friendRef = dRef.child("Friends").child(myId);
-            friendRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-
-
-                        if (dataSnapshot.hasChild(userId)) {
-                            btnaddfriend.setVisibility(View.GONE);
-                            btnreject.setVisibility(View.GONE);
-                            addBtn.setVisibility(View.GONE);
-                            cancel_Btn.setVisibility(View.GONE);
-                            friendtext_Btn.setVisibility(View.VISIBLE);
-
-
-                        } else {
-
-                            check_user_notin_FriendRequest_Ref2(userId, myId, addBtn, cancel_Btn, btnaddfriend, btnreject, friendtext_Btn);
-
-
-                        }
-
-                    } else {
-                        check_user_notin_FriendRequest_Ref2(userId, myId, addBtn, cancel_Btn, btnaddfriend, btnreject, friendtext_Btn);
-
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         }
 
         private void check_user_notin_FriendRequest_Ref2(final String userId, final String myId, final Button btnadd, final Button btncancel, final Button btnaddfriend, final Button btnreject, final TextView friend_txtBtn) {
@@ -492,30 +465,84 @@ public class AddFriendsFragment extends Fragment {
 
                 }
             });
-        }
-
-        private void addNotifications(final UserInformation info) {
-
-            DatabaseReference notfRef = dRef.child("Notifications").child(info.getUserId().toString()).push();
-
-            // DatabaseReference notfRef = dRef.child("Notifications").child(info.getUserId().toString()).child(mAuth.getCurrentUser().getUid().toString());
-            DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(info.getUserId()).push();
-            Notifications_Read_Model read = new Notifications_Read_Model(mAuth.getCurrentUser().getUid().toString(),false);
-            NotfReadRef.setValue(read);
-            Notifications_Model notifications_model = new Notifications_Model(mAuth.getCurrentUser().getUid().toString(), MyData.getMyName() + " sent a friend request");
-            notfRef.setValue(notifications_model);
 
         }
 
-    }
-    private void add_to_Notifications(final String myId, final String userId) {
-        DatabaseReference NotfRef = dRef.child("Notifications").child(userId).push();
-        DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(userId).push();
-        Notifications_Read_Model read = new Notifications_Read_Model(myId,false);
-        NotfReadRef.setValue(read);
-        Notifications_Model m_Model = new Notifications_Model(myId,MyData.getMyName().toString()+" accept a friend request");
-        NotfRef.setValue(m_Model);
+        private void Check_Is_friend(final String myId, final String userId, final Button addBtn, final Button cancel_Btn, final Button btnaddfriend, final Button btnreject, final TextView friendtext_Btn) {
+            DatabaseReference friendRef = dRef.child("Friends").child(myId);
+            friendRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+
+
+                        if (dataSnapshot.hasChild(userId)) {
+                            btnaddfriend.setVisibility(View.GONE);
+                            btnreject.setVisibility(View.GONE);
+                            addBtn.setVisibility(View.GONE);
+                            cancel_Btn.setVisibility(View.GONE);
+                            friendtext_Btn.setVisibility(View.VISIBLE);
+
+
+                        } else {
+                            check_user_notin_FriendRequest_Ref2(userId, myId, addBtn, cancel_Btn, btnaddfriend, btnreject, friendtext_Btn);
+
+
+                        }
+
+                    } else {
+                        check_user_notin_FriendRequest_Ref2(userId, myId, addBtn, cancel_Btn, btnaddfriend, btnreject, friendtext_Btn);
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        private void Check_iam_notin_userBlock(final String myId, final String userId, final Button addBtn, final Button cancel_Btn, final Button btnaddfriend, final Button btnreject, final TextView friendtext_Btn, final ImageView popmenu)
+        {
+            DatabaseReference blockRef = dRef.child("Blocks").child(userId);
+            blockRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() !=null)
+                    {
+                     if (dataSnapshot.hasChild(myId))
+                     {
+                         btnaddfriend.setVisibility(View.GONE);
+                         btnreject.setVisibility(View.GONE);
+                         addBtn.setVisibility(View.GONE);
+                         cancel_Btn.setVisibility(View.GONE);
+                         friendtext_Btn.setVisibility(View.GONE);
+                         popmenu.setVisibility(View.GONE);
+                     }
+                     else
+                         {
+                             check_user_notin_FriendRequest_Ref(myId,userId,addBtn,cancel_Btn,btnaddfriend,btnreject,friendtext_Btn);
+                         }
+                    }
+                    else
+                        {
+                            check_user_notin_FriendRequest_Ref(myId,userId,addBtn,cancel_Btn,btnaddfriend,btnreject,friendtext_Btn);
+
+                        }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
     }
+
+
 
 }

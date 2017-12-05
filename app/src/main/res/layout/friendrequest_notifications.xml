@@ -85,7 +85,6 @@
                 android:isScrollContainer="false"
                 android:dividerHeight="0dp"
                 android:divider="@null"
-                android:stackFromBottom="true"
 
 
                 >
@@ -163,7 +162,6 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:visibility="visible"
-            android:stackFromBottom="true"
 
             ></ListView>
         <TextView
@@ -176,6 +174,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:visibility="gone"
+            android:layout_marginBottom="25dp"
             />
     </LinearLayout>
 

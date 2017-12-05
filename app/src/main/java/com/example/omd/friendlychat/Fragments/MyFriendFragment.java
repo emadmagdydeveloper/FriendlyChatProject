@@ -84,11 +84,24 @@ public class MyFriendFragment extends Fragment
        dRef_Friends.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
-               friendKeys = new ArrayList<>();
-               for (DataSnapshot ds:dataSnapshot.getChildren()){
-                   friendKeys.add(ds.getKey().toString());
+               if (dataSnapshot.getValue()!=null)
+               {
+                   friendKeys = new ArrayList<>();
+                   for (DataSnapshot ds:dataSnapshot.getChildren()){
+                       friendKeys.add(ds.getKey().toString());
+
+                   }
+
+
+                   //getUserData(friendKeys);
+                   CheckmyFriend_Notin_Block(friendKeys);
                }
-               getUserData(friendKeys);
+               else
+                   {
+                       pb_Container.setVisibility(View.GONE);
+                       myFriend_Container.setVisibility(View.VISIBLE);
+                   }
+
            }
 
            @Override
@@ -213,5 +226,40 @@ public class MyFriendFragment extends Fragment
         mContext.startActivity(intent);
     }
 
+    private void CheckmyFriend_Notin_Block(final List<String> friendsKeys)
+    {
+        DatabaseReference blockRef = dRef.child(mAuth.getCurrentUser().getUid().toString());
+        blockRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue()!=null)
+                {
+                    List<String> keys = new ArrayList<String>();
+                    for (String key:friendsKeys)
+                    {
+                        if (!dataSnapshot.hasChild(key))
+                        {
+                            keys.add(key);
+                        }
+
+
+                    }
+                    getUserData(keys);
+                }
+                else
+                    {
+                        getUserData(friendsKeys);
+                        pb_Container.setVisibility(View.GONE);
+                        myFriend_Container.setVisibility(View.VISIBLE);
+                    }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

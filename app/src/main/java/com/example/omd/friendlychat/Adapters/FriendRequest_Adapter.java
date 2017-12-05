@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.omd.friendlychat.Editing.Edit;
 import com.example.omd.friendlychat.Editing.MyData;
 import com.example.omd.friendlychat.R;
 import com.example.omd.friendlychat.models.Notifications_Model;
@@ -123,12 +124,9 @@ public class FriendRequest_Adapter extends BaseAdapter {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
-                            DatabaseReference notfRef = dRef.child("Notifications").child(inf.getUserId().toString()).push();
-                            DatabaseReference NotfReadRef = dRef.child("Notifications_readed").child(inf.getUserId()).push();
-                            Notifications_Read_Model read = new Notifications_Read_Model(MyData.getMyId().toString(),false);
-                            NotfReadRef.setValue(read);
-                            Notifications_Model n_Model = new Notifications_Model(MyData.getMyId().toString(),MyData.getMyName()+" reject a friend request");
-                            notfRef.setValue(n_Model);
+                            Edit edit = new Edit(mContext);
+                            edit.add_Notifications(mAuth.getCurrentUser().getUid().toString(),inf.getUserId().toString().toString(),"reject a friend request at");
+
                         }
                     }
                 });
