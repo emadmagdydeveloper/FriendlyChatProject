@@ -289,7 +289,6 @@ public class ChatRoom extends AppCompatActivity {
                    // date.setVisibility(View.VISIBLE);
 
 
-
             }
         });
     }
